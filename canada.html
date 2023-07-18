@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>D3.js Chart</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
+    svg {
+      background-color: lightgray;
+    }
+  </style>
+</head>
+<body>
+  <div id="provs"></div>
+  <script>
+    // Function to create a D3.js chart
+    function d3jschart1() {
+      // Set up margins and dimensions
+      var margin = { top: 50, right: 50, bottom: 50, left: 50 },
+        width = 1500 - margin.left - margin.right,
+        height = 1100 - margin.top - margin.bottom;
+
+      var projection = d3
+        .geoMercator() // Use the WGS84 projection (geoMercator)
+        .center([-98.5, 61.4]) // Set the center coordinates for Canada
+        .scale(1500) // Adjust the scale for the map size
+        .translate([width, height]);
+
+      var path = d3.geoPath().projection(projection);
+
+      // Create SVG element
+      var md3 = d3.select("#provs");
+      const svg = md3.append("svg").attr("viewBox", [0, 0, width, height]);
+
+      const g = svg.append("g");
+
+      // Fetch and process the GeoJSON data
+      const fetchGeoJson = async (url) => {
+        try {
+          const response = await fetch(url);
+          const geojsonData = await response.json();
+          return geojsonData;
+        } catch (error) {
+          console.error('Error fetching GeoJSON data:', error);
+        }
+      };
+
+      const displayMap = async () => {
+        const geojsonData = await fetchGeoJson('https://raw.githubusercontent.com/rampedro/ShinyR-d3/main/canada.geojson');
+
+        // Remove the existing map elements if any
+        d3.selectAll(".map").remove();
+
+        // Bind GeoJSON data
+        const map = g
+          .selectAll("path")
+          .data(geojsonData.features)
+          .enter()
+          .append("path")
+          .attr("class", "map")
+          .attr("d", path)
+          .attr("fill", "blue")
+          .attr("stroke", "white")
+          .attr("stroke-width", 0.5)
+          .on("click", clicked)
+          .on("mouseover", function (event, d) {
+            d3.select(this).attr("fill", "red"); // Change the color on mouseover
+          })
+          .on("mouseout", function (event, d) {
+            d3.select(this).attr("fill", "blue"); // Revert the color on mouseout
+          });
+
+        // Add tooltip for map
+        map.append("title").text((d) => d.properties.name);
+      };
+
+      const displayCensusDivisions = async () => {
+        const censusDivisionsData = await fetchGeoJson('https://raw.githubusercontent.com/rampedro/ShinyR-d3/main/canada_divisions.geojson');
+
+        // Filter census divisions data based on PUID
+        function filterCensusDivisionsData() {
+          console.log("Original Census Divisions Data:", censusDivisionsData);
+
+          const filteredCensusDivisionsData = censusDivisionsData.features.filter(
+            (feature) => feature.properties.PRUID === '35'
+          );
+
+          //console.log("Filtered Census Divisions Data:", filteredCensusDivisionsData);
+
+          return filteredCensusDivisionsData;
+        }
+
+        myData = filterCensusDivisionsData()
+
+        // Remove the existing census divisions elements if any
+        d3.selectAll(".census-division").remove();
+
+        // Bind filtered census divisions GeoJSON data to existing SVG
+        const censusDivisions = g
+          .selectAll(".census-division")
+          .data(myData)
+          .enter()
+          .append("path")
+          .attr("class", "census-division")
+          .attr("d", path)
+          .attr("fill", "green")
+          .attr("stroke", "white")
+          .attr("stroke-width", 0.5)
+          .on("mouseover", function (event, d) {
+            d3.select(this).attr("fill", "orange"); // Change the color on mouseover
+          })
+          .on("mouseout", function (event, d) {
+            d3.select(this).attr("fill", "green"); // Revert the color on mouseout
+          });
+
+        // Add tooltip for census divisions
+        censusDivisions.append("title").text((d) => d.properties.name);
+      };
+
+      const zoom = d3.zoom()
+        .scaleExtent([1, 80])
+        .on("zoom", zoomed);
+
+      svg.call(zoom);
+
+      function zoomed(event) {
+        const { k, x, y } = event.transform;
+
+        g.attr("transform", `translate(${x}, ${y}) scale(${k})`);
+        g.attr("stroke-width", 1 / k);
+      }
+
+      function clicked(event, d) {
+        const [[x0, y0], [x1, y1]] = path.bounds(d);
+
+        // Calculate the center of the clicked region
+        const [xCenter, yCenter] = [(x0 + x1) / 2, (y0 + y1) / 2];
+
+        // Calculate the new scale and translation
+        const scaleFactor = Math.min(8, 0.9 / Math.max((x1 - x0) / width, (y1 - y0) / height));
+        const [xTranslate, yTranslate] = [width / 2 - xCenter * scaleFactor, height / 2 - yCenter * scaleFactor];
+
+        // Apply the zoom transform
+        svg.transition().duration(750).call(
+          zoom.transform,
+          d3.zoomIdentity.translate(xTranslate, yTranslate).scale(scaleFactor),
+          d3.pointer(event, svg.node())
+        );
+
+        // Display the census divisions when map is clicked
+        displayCensusDivisions();
+      }
+
+      displayMap();
+    }
+
+    // Call the chart function
+    d3jschart1();
+  </script>
+</body>
+</html>
