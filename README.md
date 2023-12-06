@@ -1,6 +1,21 @@
 # Canada-Map-with-details
 
+Province/Territory: “Portion of Canada’s land area governed by a political authority. Canada is divided into 10 provinces and 3 territories.”
 
+Census Metro Areas (CMA): “Area consisting of one of more neighbouring municipalities situated around a core. A census metropolitan area must have a total population of at least 100,000 of which 50,000 or more live in the core.” There are 33 CMAs in Canada as of the 2011 census.
+
+Census Division (CD): “Group of neighbouring municipalities joined together for the purposes of regional planning and managing common services (such as police or ambulance services).” In Toronto, the amalgamated City of Toronto corresponds to the Census Division unit.
+
+Census Subdivision (CSD): “Area that is a municipality or an area that is deemed to be equivalent to a municipality for statistical reporting purposes (e.g. as an Indian reserve or an unorganized territory). Municipal status is defined by laws in effect in each province and territory in Canada.” The Toronto CSD is the same as the CD (see above), because of amalgamation.
+Census Tract (CT): “Area that is small and relatively stable. Census tracts usually have a population of 2,500 to 8,000 persons. They are located in large urban centres that must have an urban core population of 50,000 or more.”
+
+Dissemination Area (DA): “Small area composed of one or more neighbouring dissemination blocks, with a population of 400 to 700 persons. All of Canada is divided into dissemination areas. It is the smallest standard geographic 
+areas for which all census data are disseminated”.
+
+Canada Postal Code: “The postal code is a six-character code defined and maintained by Canada Post Corporation for the purpose of sorting and delivering mail.”
+
+
+[https://mdl.library.utoronto.ca/canadian-census-geography-unit-definitions]
 
 Canadian Levels of Geography  🇨🇦
 Census Division (Canada):
