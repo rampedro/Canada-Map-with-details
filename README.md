@@ -5,6 +5,9 @@
 
 Census tracts have surveys such as the American community survey, decennial census, economic surveys, population estimates, public sector census, and economic censuses that can be leveraged to assess the overall impact of socioeconomic parameters on the health and wellbeing of patients in a given healthcare system at a given geographical location. Census tract information is gathered by assigning each person, household, housing unit, institution, farm, business establishment, or other responding entity to a specific location, and then assigning that location to a zip code tabulation area appropriate to the census or sample survey by way of geocoding [8,9].
 
+#### indecies 
+
+Census tract information has been used to develop indices that directly explain the SDOH of people by using their zip code location to develop the area deprivation index, social vulnerability index, and modified retail food index [10,11,12,13]
 
 https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9599320/. 
 
